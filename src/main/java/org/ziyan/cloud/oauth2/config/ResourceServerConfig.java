@@ -9,23 +9,23 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 
 /**
  * 资源服务器
- * 
- * @author wangx
  *
+ * @author wangx
  */
-@EnableResourceServer
 @Configuration
+@EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-	@Override
-	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-		resources.resourceId("*").stateless(true);
-	}
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) {
+    }
 
-	@Override
-	public void configure(HttpSecurity http) throws Exception {
-		
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-		.and().requestMatchers().anyRequest()
-		.and().anonymous().and().authorizeRequests().antMatchers("/**").authenticated();
-	}
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+
+        http.requestMatchers().antMatchers("/api/v1/users/**")
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/")
+                .and()
+                .authorizeRequests()
+                .anyRequest().authenticated();
+    }
 }
